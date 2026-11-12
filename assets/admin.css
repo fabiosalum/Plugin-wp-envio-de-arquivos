@@ -1,0 +1,150 @@
+.f2di-admin {
+  --f2di-admin-blue: #215e75;
+  --f2di-admin-ink: #173645;
+  --f2di-admin-border: #d4e1e8;
+  max-width: 900px;
+}
+
+.f2di-admin-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 26px;
+  flex-wrap: wrap-reverse;
+  margin: 1rem 0;
+  padding: clamp(20px, 4vw, 35px);
+  border-radius: 17px;
+  background: radial-gradient(ellipse at 96% 0%, #397c94, transparent 62%), linear-gradient(125deg, #123443, #215e75);
+  color: #fff;
+}
+
+.f2di-admin-hero h1 { margin: .25em 0; padding: 0; color: #fff; font-size: clamp(25px, 4vw, 35px); font-weight: 680; }
+.f2di-admin-hero p { margin: .5em 0 0; color: #e3f0f5; }
+.f2di-admin-eyebrow { color: #bceafa; font-size: 11px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.f2di-admin .f2di-brand { display: block; padding: 9px 12px; border-radius: 8px; background: #fff; }
+.f2di-admin .f2di-brand img { display: block; width: 108px; height: auto; }
+
+.f2di-admin-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem .7rem;
+  padding: .8rem 1rem;
+  border: 1px solid var(--f2di-admin-border);
+  border-radius: 10px;
+  background: #f8fcfe;
+  color: var(--f2di-admin-ink);
+}
+
+.f2di-admin-catalog p { margin: 0; }
+.f2di-admin-catalog a { color: var(--f2di-admin-blue); font-weight: 650; }
+.f2di-admin-view { margin-left: auto; }
+
+.f2di-upload {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--f2di-admin-border);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.f2di-upload-section { padding: clamp(1rem, 3vw, 1.6rem); }
+.f2di-upload-section + .f2di-upload-section { border-top: 1px solid #e6eef2; }
+
+.f2di-upload h2 {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 0 0 .95rem;
+  color: var(--f2di-admin-ink);
+  font-size: 17px;
+}
+
+.f2di-step {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #e8f4fa;
+  color: var(--f2di-admin-blue);
+  font-size: 13px;
+}
+
+.f2di-upload .f2di-label {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--f2di-admin-ink);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+#f2di-files {
+  box-sizing: border-box;
+  width: 100%;
+  padding: .85rem;
+  border: 1px dashed #8aa9b8;
+  border-radius: 9px;
+  background: #f6fbfd;
+  color: #254b5b;
+}
+
+#f2di-files::file-selector-button {
+  margin-right: .7rem;
+  padding: .45rem .65rem;
+  border: 1px solid #92b0bf;
+  border-radius: 6px;
+  background: #fff;
+  color: #215e75;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.f2di-fieldset { min-width: 0; margin: 0 0 .9rem; padding: 0; border: 0; }
+.f2di-fieldset > input { width: min(100%, 280px); }
+.f2di-categories {
+  max-height: 13rem;
+  overflow: auto;
+  margin: .45rem 0 0;
+  padding: .55rem .75rem;
+  border: 1px solid var(--f2di-admin-border);
+  border-radius: 8px;
+  background: #f9fbfc;
+}
+
+.f2di-categories ul { margin: .3rem 0 .3rem 1.25rem; }
+.f2di-categories li { margin-bottom: 0; }
+.f2di-categories label { display: inline-block; padding: .28rem 0; }
+.f2di-upload [hidden] { display: none !important; }
+.f2di-upload #f2di-file-status:empty { display: none; }
+
+.f2di-upload-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .85rem clamp(1rem, 3vw, 1.6rem);
+  border-top: 1px solid #e6eef2;
+  background: #f6fafc;
+}
+
+.f2di-upload-footer p { margin: 0; color: #465d69; }
+.f2di-upload-footer .submit { padding: 0; }
+.f2di-upload .button-primary { padding: 2px 14px; border-color: #215e75; background: #215e75; font-weight: 650; }
+.f2di-upload .button-primary:hover { border-color: #153746; background: #153746; }
+
+.f2di-status { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; }
+.f2di-status-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.f2di-status-on { background: #e4f3de; color: #23511a; }
+.f2di-status-off { background: #eeeef0; color: #4e4e54; }
+.column-f2di_status { width: 145px; }
