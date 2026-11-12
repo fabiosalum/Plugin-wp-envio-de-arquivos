@@ -1,0 +1,55 @@
+name: Publicar versão do plugin
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - f2-documentos-institucionais.php
+      - readme.txt
+      - assets/**
+      - includes/**
+      - scripts/build-release.py
+      - .github/workflows/release.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-plugin
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Validar PHP
+        run: find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Gerar ZIP e dados de atualização
+        id: package
+        run: |
+          version="$(python3 scripts/build-release.py)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Publicar Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          set -euo pipefail
+          tag="v$RELEASE_VERSION"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "A versão $tag já foi publicada. Incremente a versão para publicar outra."
+            exit 0
+          fi
+          gh release create "$tag"             dist/f2-documentos-institucionais.zip             dist/update.json             --target "$GITHUB_SHA"             --title "eduCAT Documentos $RELEASE_VERSION"             --notes-file dist/release-notes.md             --latest
