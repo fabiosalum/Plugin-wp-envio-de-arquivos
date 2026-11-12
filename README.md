@@ -12,7 +12,7 @@ Plugin WordPress para enviar e organizar arquivos e disponibilizar um catálogo 
 
 Baixe **f2-documentos-institucionais.zip** nos arquivos anexados à [última Release](https://github.com/fabiosalum/Plugin-wp-envio-de-arquivos/releases/latest). Em Plugins → Adicionar novo → Enviar plugin, selecione o ZIP e ative ou substitua a instalação atual.
 
-Para começar a receber atualizações pelo painel, instale a versão 1.3.0 ou posterior uma vez. Depois, use **Documentos → Atualizações → Verificar agora** ou a tela de plugins do WordPress.
+Para começar a receber atualizações pelo painel, instale a versão 1.3.0 ou posterior uma vez. Depois, use **Documentos → Atualizações → Verificar atualizações** ou a tela de plugins do WordPress.
 
 O plugin consulta o arquivo público `update.json` da última Release. Ele confere versão, requisitos de WordPress e PHP e a integridade SHA-256 do ZIP antes de instalá-lo. A consulta usa cache de até uma hora. A instalação segue a escolha de atualização do administrador no WordPress.
 

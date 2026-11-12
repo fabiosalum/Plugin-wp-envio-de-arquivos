@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 final class F2DI_Updater {
 	const REPOSITORY = 'fabiosalum/Plugin-wp-envio-de-arquivos';
 	const SLUG = 'f2-documentos-institucionais';
-	const CACHE_KEY = 'f2di_github_release_v1';
+	const CACHE_KEY = 'f2di_release_v2';
 
 	private $plugin_file;
 
@@ -57,14 +57,14 @@ final class F2DI_Updater {
 
 	private function parse_response( $response ) {
 		if ( is_wp_error( $response ) ) {
-			return new WP_Error( 'f2di_release', 'Não foi possível consultar o GitHub. Tente novamente mais tarde.' );
+			return new WP_Error( 'f2di_release', 'Não foi possível verificar as atualizações. Tente novamente mais tarde.' );
 		}
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return new WP_Error( 'f2di_release', 'O GitHub não disponibilizou os dados da versão. Verifique se a Release contém o arquivo update.json.' );
+			return new WP_Error( 'f2di_release', 'Os dados da atualização estão indisponíveis. Tente novamente mais tarde.' );
 		}
 		$data = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( ! is_array( $data ) ) {
-			return new WP_Error( 'f2di_release', 'Os dados da versão recebidos do GitHub são inválidos.' );
+			return new WP_Error( 'f2di_release', 'Os dados recebidos da atualização são inválidos.' );
 		}
 		foreach ( array( 'version', 'requires', 'requires_php' ) as $field ) {
 			if ( ! isset( $data[ $field ] ) || ! is_string( $data[ $field ] ) || ! preg_match( '/^[0-9]+(?:\.[0-9]+){1,3}$/D', $data[ $field ] ) ) {
@@ -76,7 +76,7 @@ final class F2DI_Updater {
 			|| self::SLUG !== $data['slug'] || $package !== $data['package']
 			|| ! is_string( $data['sha256'] ) || ! preg_match( '/^[a-f0-9]{64}$/D', $data['sha256'] )
 		) {
-			return new WP_Error( 'f2di_release', 'O pacote recebido não corresponde ao repositório do plugin.' );
+			return new WP_Error( 'f2di_release', 'O pacote recebido não corresponde ao plugin.' );
 		}
 		return array(
 			'version'      => $data['version'],
@@ -98,7 +98,6 @@ final class F2DI_Updater {
 		return array(
 			'slug'         => self::SLUG,
 			'version'      => $release['version'],
-			'url'          => $this->repository_url(),
 			'package'      => $release['package'],
 			'requires'     => $release['requires'],
 			'requires_php' => $release['requires_php'],
@@ -118,13 +117,12 @@ final class F2DI_Updater {
 			'slug'          => self::SLUG,
 			'version'       => $release['version'],
 			'author'        => 'F2Digital',
-			'homepage'      => $this->repository_url(),
 			'requires'      => $release['requires'],
 			'requires_php'  => $release['requires_php'],
 			'download_link' => $release['package'],
 			'sections'      => array(
 				'description' => '<p>Envio e gestão de documentos com catálogo público por categoria e ano.</p>',
-				'changelog'   => '<p><a href="' . esc_url( $this->repository_url() . '/releases' ) . '">Consultar o histórico de versões no GitHub</a></p>',
+				'changelog'   => '<p>Melhorias na interface de verificação de atualizações.</p>',
 			),
 		);
 	}
@@ -159,7 +157,7 @@ final class F2DI_Updater {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		$file = is_string( $reply ) && is_file( $reply ) ? $reply : download_url( $package );
 		if ( is_wp_error( $file ) ) {
-			return $file;
+			return new WP_Error( 'f2di_download', 'Não foi possível baixar a atualização. Tente novamente mais tarde.' );
 		}
 		if ( ! hash_equals( $release['sha256'], (string) hash_file( 'sha256', $file ) ) ) {
 			wp_delete_file( $file );
@@ -193,7 +191,7 @@ final class F2DI_Updater {
 		delete_site_transient( self::CACHE_KEY );
 		delete_site_transient( 'update_plugins' );
 		wp_update_plugins();
-		wp_safe_redirect( $this->settings_url(), 303 );
+		wp_safe_redirect( add_query_arg( 'f2di_checked', '1', $this->settings_url() ), 303 );
 		exit;
 	}
 
@@ -201,27 +199,25 @@ final class F2DI_Updater {
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			wp_die( 'Sem permissão para visualizar atualizações.', '', array( 'response' => 403 ) );
 		}
-		$release = $this->release();
-		$installed = $this->installed_version();
+		$checked = isset( $_GET['f2di_checked'] ) && '1' === $_GET['f2di_checked'];
 		?>
 		<div class="wrap">
 			<h1>Atualizações do eduCAT Documentos</h1>
-			<p><?php echo esc_html( 'Versão instalada ' . $installed ); ?></p>
-			<p>As versões do plugin são publicadas no repositório público do GitHub.</p>
-			<?php if ( is_wp_error( $release ) ) : ?>
-				<div class="notice notice-warning inline"><p><?php echo esc_html( $release->get_error_message() ); ?></p></div>
-			<?php elseif ( version_compare( $release['version'], $installed, '>' ) ) : ?>
-				<div class="notice notice-info inline"><p><?php echo esc_html( 'Nova versão disponível — ' . $release['version'] ); ?></p></div>
-				<p><a class="button button-primary" href="<?php echo esc_url( self_admin_url( 'plugins.php' ) ); ?>">Abrir plugins para atualizar</a></p>
-			<?php else : ?>
-				<div class="notice notice-success inline"><p>O plugin está atualizado.</p></div>
+			<?php if ( $checked ) : ?>
+				<?php $release = $this->release(); ?>
+				<?php if ( is_wp_error( $release ) ) : ?>
+					<div class="notice notice-warning inline"><p><?php echo esc_html( $release->get_error_message() ); ?></p></div>
+				<?php elseif ( version_compare( $release['version'], $this->installed_version(), '>' ) ) : ?>
+					<div class="notice notice-info inline"><p><?php echo esc_html( 'Nova versão disponível — ' . $release['version'] . '. Atualize pela página Plugins.' ); ?></p></div>
+				<?php else : ?>
+					<div class="notice notice-success inline"><p>O plugin está atualizado.</p></div>
+				<?php endif; ?>
 			<?php endif; ?>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="f2di_check_updates">
 				<?php wp_nonce_field( 'f2di_check_updates' ); ?>
-				<?php submit_button( 'Verificar agora', 'secondary' ); ?>
+				<?php submit_button( 'Verificar atualizações', 'secondary' ); ?>
 			</form>
-			<p><a href="<?php echo esc_url( $this->repository_url() . '/releases' ); ?>">Ver versões publicadas no GitHub</a></p>
 		</div>
 		<?php
 	}

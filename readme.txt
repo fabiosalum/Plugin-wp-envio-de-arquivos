@@ -1,7 +1,7 @@
 === eduCAT Documentos ===
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPL-2.0-or-later
 
 == Instalação e atualização ==
@@ -14,11 +14,11 @@ License: GPL-2.0-or-later
 
 O shortcode anterior [f2_documentos] também renderiza a versão atual do catálogo. Documentos, categorias e páginas cadastrados na versão anterior são reaproveitados.
 
-== Atualizações pelo GitHub ==
+== Atualizações online ==
 
-A versão 1.3.0 inclui um atualizador vinculado ao repositório público fabiosalum/Plugin-wp-envio-de-arquivos. Instale esta versão uma vez por ZIP. As próximas versões publicadas como Releases poderão ser instaladas pelo painel de plugins do WordPress.
+O plugin inclui um atualizador online. Instale esta versão uma vez por ZIP. As próximas versões publicadas poderão ser instaladas pelo painel de plugins do WordPress.
 
-Use Documentos → Atualizações → Verificar agora para consultar novas versões. A consulta utiliza cache de até uma hora, e o botão permite verificar novamente. O pacote é validado por SHA-256 antes da instalação.
+Use Documentos → Atualizações → Verificar atualizações para consultar novas versões. A consulta utiliza cache de até uma hora, e o botão permite verificar novamente. O pacote é validado por SHA-256 antes da instalação.
 
 == Catálogo público ==
 

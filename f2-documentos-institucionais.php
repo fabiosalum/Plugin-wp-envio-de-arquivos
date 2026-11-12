@@ -2,7 +2,7 @@
 /**
  * Plugin Name: eduCAT Documentos
  * Description: Envio em lote, gestão por categoria e ano e catálogo público de documentos.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Update URI: https://github.com/fabiosalum/Plugin-wp-envio-de-arquivos
@@ -21,7 +21,7 @@ final class F2_Documentos_Institucionais {
 	const FILE_META = '_f2di_attachment';
 	const SHORTCODE = 'educat_documentos';
 	const DISABLED_META = '_f2di_disabled';
-	const VERSION = '1.3.0';
+	const VERSION = '1.3.1';
 	const FORMATS = 'pdf docx doc mp3 mp4 ppt pptx pps xls xlsx txt zip';
 
 	public static function boot() {

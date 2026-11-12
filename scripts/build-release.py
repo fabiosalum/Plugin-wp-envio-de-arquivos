@@ -53,7 +53,7 @@ manifest = {
 (dist / "release-notes.md").write_text(
     f"eduCAT Documentos {version}\n\n"
     "Baixe f2-documentos-institucionais.zip para instalar ou atualizar no WordPress.\n\n"
-    "O pacote inclui o catálogo por categorias e a integração de atualizações pelo GitHub. "
+    "O pacote inclui o catálogo por categorias e a integração de atualizações online. "
     "No painel, abra Documentos → Atualizações para consultar novas versões.\n"
 )
 print(version)
